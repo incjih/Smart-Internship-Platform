@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Internia – Smart Internship Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0e0f11;--bg2:#161719;--bg3:#1e2024;--bg4:#26282e;
+  --border:#2e3038;--border2:#3a3d47;
+  --text:#f0f0ee;--text2:#9a9da8;--text3:#62656f;
+  --accent:#c8f06a;--accent2:#a8d84a;--accentdark:#0e1a00;
+  --blue:#6ab4f0;--bluedark:#0a1a2e;
+  --purple:#b09cf0;--purpledark:#1a0e2e;
+  --coral:#f09c6a;--coraldark:#2e1a0e;
+  --red:#f06a6a;--reddark:#2e0e0e;
+  --radius:10px;--radius2:16px;--radius3:24px;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;line-height:1.6;}
+h1,h2,h3{font-family:'DM Serif Display',serif;}
+button{font-family:'DM Sans',sans-serif;cursor:pointer;}
+.app{display:flex;flex-direction:column;min-height:100vh;}
+
+/* NAV */
+nav{background:var(--bg);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:100;}
+.logo{font-family:'DM Serif Display',serif;font-size:22px;color:var(--accent);letter-spacing:-0.5px;}
+.logo span{color:var(--text2);font-size:14px;font-family:'DM Sans',sans-serif;margin-left:6px;font-weight:300;}
+.nav-links{display:flex;gap:4px;}
+.nav-btn{background:none;border:none;color:var(--text2);padding:6px 14px;border-radius:var(--radius);font-size:14px;transition:all .15s;}
+.nav-btn:hover{background:var(--bg3);color:var(--text);}
+.nav-btn.active{color:var(--accent);background:rgba(200,240,106,.08);}
+.nav-right{display:flex;align-items:center;gap:10px;}
+.role-badge{font-size:12px;padding:3px 10px;border-radius:20px;font-weight:500;}
+.role-student{background:rgba(106,180,240,.12);color:var(--blue);border:1px solid rgba(106,180,240,.25);}
+.role-recruiter{background:rgba(176,156,240,.12);color:var(--purple);border:1px solid rgba(176,156,240,.25);}
+.role-admin{background:rgba(240,156,106,.12);color:var(--coral);border:1px solid rgba(240,156,106,.25);}
+.user-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:6px 14px;border-radius:var(--radius);font-size:13px;display:flex;align-items:center;gap:6px;transition:.15s;}
+.user-btn:hover{border-color:var(--border2);background:var(--bg4);}
+.switch-btn{background:var(--accent);color:var(--accentdark);border:none;padding:6px 12px;border-radius:var(--radius);font-size:12px;font-weight:600;transition:.15s;}
+.switch-btn:hover{background:var(--accent2);}
+
+/* MAIN */
+main{flex:1;padding:2rem;}
+.page{display:none;}
+.page.active{display:block;}
+
+/* HERO */
+.hero{text-align:center;padding:3rem 0 2rem;max-width:700px;margin:0 auto;}
+.hero h1{font-size:52px;line-height:1.1;margin-bottom:1rem;color:var(--text);}
+.hero h1 em{color:var(--accent);font-style:normal;}
+.hero p{color:var(--text2);font-size:17px;margin-bottom:2rem;line-height:1.7;}
+.search-box{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius3);padding:6px 6px 6px 20px;display:flex;align-items:center;gap:10px;max-width:600px;margin:0 auto 1.5rem;}
+.search-box input{flex:1;background:none;border:none;outline:none;color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;}
+.search-box input::placeholder{color:var(--text3);}
+.ai-btn{background:var(--accent);color:var(--accentdark);border:none;padding:10px 20px;border-radius:20px;font-size:14px;font-weight:600;display:flex;align-items:center;gap:6px;transition:.15s;}
+.ai-btn:hover{background:var(--accent2);}
+.ai-spark{font-size:16px;}
+.filter-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:0.5rem;}
+.filter-chip{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:5px 14px;border-radius:20px;font-size:13px;transition:.15s;}
+.filter-chip:hover,.filter-chip.on{background:rgba(200,240,106,.1);border-color:var(--accent);color:var(--accent);}
+
+/* STATS */
+.stats-row{display:flex;gap:12px;max-width:900px;margin:0 auto 2.5rem;justify-content:center;}
+.stat{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius2);padding:1rem 1.5rem;text-align:center;flex:1;}
+.stat-num{font-family:'DM Serif Display',serif;font-size:28px;color:var(--accent);}
+.stat-label{font-size:12px;color:var(--text3);margin-top:2px;}
+
+/* CARDS GRID */
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;}
+.section-title{font-family:'DM Serif Display',serif;font-size:22px;}
+.view-all{background:none;border:1px solid var(--border);color:var(--text2);padding:5px 14px;border-radius:var(--radius);font-size:13px;cursor:pointer;transition:.15s;}
+.view-all:hover{border-color:var(--border2);color:var(--text);}
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;max-width:1100px;margin:0 auto 3rem;}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius2);padding:1.25rem;transition:.2s;position:relative;overflow:hidden;}
+.card:hover{border-color:var(--border2);background:var(--bg3);transform:translateY(-1px);}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;}
+.company-logo{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;flex-shrink:0;}
+.logo-g{background:rgba(106,180,240,.12);color:var(--blue);}
+.logo-m{background:rgba(176,156,240,.12);color:var(--purple);}
+.logo-a{background:rgba(200,240,106,.12);color:var(--accent);}
+.logo-s{background:rgba(240,156,106,.12);color:var(--coral);}
+.logo-n{background:rgba(240,106,106,.12);color:var(--red);}
+.match-badge{font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;background:rgba(200,240,106,.12);color:var(--accent);border:1px solid rgba(200,240,106,.2);}
+.card h3{font-size:16px;font-weight:500;margin-bottom:4px;font-family:'DM Sans',sans-serif;}
+.card-company{font-size:13px;color:var(--text2);margin-bottom:10px;}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.tag{font-size:11px;padding:3px 9px;border-radius:20px;background:var(--bg4);color:var(--text2);border:1px solid var(--border);}
+.tag.remote{background:rgba(106,180,240,.08);color:var(--blue);border-color:rgba(106,180,240,.2);}
+.tag.paid{background:rgba(200,240,106,.08);color:var(--accent);border-color:rgba(200,240,106,.2);}
+.card-footer{display:flex;align-items:center;justify-content:space-between;}
+.salary{font-size:13px;color:var(--accent);font-weight:500;}
+.deadline{font-size:12px;color:var(--text3);}
+.apply-btn{background:var(--accent);color:var(--accentdark);border:none;padding:7px 16px;border-radius:var(--radius);font-size:13px;font-weight:600;transition:.15s;}
+.apply-btn:hover{background:var(--accent2);}
+.apply-btn:disabled{background:var(--bg4);color:var(--text3);cursor:not-allowed;}
+.card-ribbon{position:absolute;top:0;left:0;right:0;height:2px;}
+.ribbon-blue{background:var(--blue);}
+.ribbon-purple{background:var(--purple);}
+.ribbon-green{background:var(--accent);}
+
+/* AI RESULT */
+.ai-result{background:var(--bg2);border:1px solid rgba(200,240,106,.25);border-radius:var(--radius2);padding:1.5rem;max-width:700px;margin:0 auto 2rem;display:none;}
+.ai-result.show{display:block;}
+.ai-result-head{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.ai-icon{width:28px;height:28px;border-radius:8px;background:rgba(200,240,106,.15);display:flex;align-items:center;justify-content:center;font-size:14px;}
+.ai-label{font-size:13px;font-weight:600;color:var(--accent);}
+.ai-text{font-size:14px;color:var(--text2);line-height:1.7;}
+.ai-loader{display:flex;gap:4px;align-items:center;}
+.ai-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 1.2s ease-in-out infinite;}
+.ai-dot:nth-child(2){animation-delay:.2s;}
+.ai-dot:nth-child(3){animation-delay:.4s;}
+@keyframes pulse{0%,80%,100%{opacity:.3;transform:scale(.8);}40%{opacity:1;transform:scale(1);}}
+
+/* APPLICATION PAGE */
+.app-form{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius2);padding:2rem;max-width:660px;margin:0 auto;}
+.app-form h2{font-size:24px;margin-bottom:6px;}
+.app-form .sub{color:var(--text2);font-size:14px;margin-bottom:2rem;}
+.steps{display:flex;gap:0;margin-bottom:2rem;position:relative;}
+.step{flex:1;text-align:center;position:relative;}
+.step::after{content:'';position:absolute;top:14px;left:50%;right:-50%;height:1px;background:var(--border);}
+.step:last-child::after{display:none;}
+.step-dot{width:28px;height:28px;border-radius:50%;background:var(--bg4);border:2px solid var(--border);margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--text3);position:relative;z-index:1;}
+.step.done .step-dot{background:var(--accent);border-color:var(--accent);color:var(--accentdark);}
+.step.active .step-dot{border-color:var(--accent);color:var(--accent);background:rgba(200,240,106,.1);}
+.step-label{font-size:11px;color:var(--text3);}
+.step.active .step-label{color:var(--text2);}
+.step.done .step-label{color:var(--text2);}
+.form-group{margin-bottom:1.25rem;}
+label{display:block;font-size:13px;font-weight:500;color:var(--text2);margin-bottom:6px;}
+input[type=text],input[type=email],textarea,select{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:var(--radius);padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:.15s;}
+input:focus,textarea:focus,select:focus{border-color:var(--border2);background:var(--bg4);}
+textarea{resize:vertical;min-height:100px;}
+select option{background:var(--bg3);}
+.form-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:1.5rem;}
+.btn{padding:9px 20px;border-radius:var(--radius);font-size:14px;font-weight:500;border:none;transition:.15s;cursor:pointer;}
+.btn-primary{background:var(--accent);color:var(--accentdark);font-weight:600;}
+.btn-primary:hover{background:var(--accent2);}
+.btn-ghost{background:none;border:1px solid var(--border);color:var(--text2);}
+.btn-ghost:hover{background:var(--bg3);color:var(--text);}
+
+/* DASHBOARD */
+.dash-grid{display:grid;grid-template-columns:260px 1fr;gap:20px;max-width:1100px;margin:0 auto;}
+.dash-sidebar{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius2);padding:1.25rem;height:fit-content;}
+.dash-sidebar h3{font-size:14px;font-weight:500;color:var(--text2);margin-bottom:12px;text-transform:uppercase;letter-spacing:.5px;font-family:'DM Sans',sans-serif;}
+.dash-menu-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--radius);font-size:14px;color:var(--text2);cursor:pointer;transition:.15s;margin-bottom:2px;}
+.dash-menu-item:hover{background:var(--bg3);color:var(--text);}
+.dash-menu-item.active{background:rgba(200,240,106,.08);color:var(--accent);}
+.dash-menu-icon{width:18px;text-align:center;font-size:15px;}
+.dash-main .section-header{margin-bottom:1rem;}
+.app-item{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius2);padding:1rem 1.25rem;margin-bottom:10px;display:flex;align-items:center;gap:16px;}
+.app-item:hover{border-color:var(--border2);}
+.app-logo-sm{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;}
+.app-info{flex:1;}
+.app-role{font-size:14px;font-weight:500;}
+.app-co{font-size:13px;color:var(--text2);}
+.app-status{font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px;}
+.status-pending{background:rgba(240,156,106,.1);color:var(--coral);border:1px solid rgba(240,156,106,.2);}
+.status-review{background:rgba(106,180,240,.1);color:var(--blue);border:1px solid rgba(106,180,240,.2);}
+.status-approved{background:rgba(200,240,106,.1);color:var(--accent);border:1px solid rgba(200,240,106,.2);}
+.status-rejected{background:rgba(240,106,106,.1);color:var(--red);border:1px solid rgba(240,106,106,.2);}
+.app-date{font-size:12px;color:var(--text3);}
+
+/* RECRUITER PANEL */
+.candidate-item{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius2);padding:1rem 1.25rem;margin-bottom:10px;display:flex;align-items:center;gap:16px;}
+.avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:14px;flex-shrink:0;}
+.av1{background:rgba(106,180,240,.12);color:var(--blue);}
+.av2{background:rgba(176,156,240,.12);color:var(--purple);}
+.av3{background:rgba(200,240,106,.12);color:var(--accent);}
+.av4{background:rgba(240,156,106,.12);color:var(--coral);}
+.cand-info{flex:1;}
+.cand-name{font-size:14px;font-weight:500;}
+.cand-skills{font-size:12px;color:var(--text2);}
+.action-btns{display:flex;gap:6px;}
+.btn-accept{background:rgba(200,240,106,.1);color:var(--accent);border:1px solid rgba(200,240,106,.2);padding:5px 12px;border-radius:var(--radius);font-size:12px;font-weight:600;transition:.15s;}
+.btn-accept:hover{background:rgba(200,240,106,.2);}
+.btn-reject{background:rgba(240,106,106,.08);color:var(--red);border:1px solid rgba(240,106,106,.15);padding:5px 12px;border-radius:var(--radius);font-size:12px;font-weight:600;transition:.15s;}
+.btn-reject:hover{background:rgba(240,106,106,.15);}
+.btn-view{background:none;border:1px solid var(--border);color:var(--text2);padding:5px 12px;border-radius:var(--radius);font-size:12px;transition:.15s;}
+.btn-view:hover{background:var(--bg3);}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:200;display:none;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius2);padding:2rem;width:500px;max-width:95vw;max-height:90vh;overflow-y:auto;position:relative;}
+.modal h2{font-size:22px;margin-bottom:6px;}
+.modal .sub{color:var(--text2);font-size:14px;margin-bottom:1.5rem;}
+.close-modal{position:absolute;top:1rem;right:1rem;background:none;border:1px solid var(--border);color:var(--text2);width:28px;height:28px;border-radius:8px;font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.close-modal:hover{background:var(--bg3);}
+
+/* NOTIFICATION */
+.notif{position:fixed;top:72px;right:20px;background:var(--bg3);border:1px solid var(--accent);border-radius:var(--radius2);padding:.85rem 1.25rem;font-size:14px;color:var(--text);z-index:300;transform:translateY(-10px);opacity:0;transition:.3s;max-width:320px;}
+.notif.show{transform:translateY(0);opacity:1;}
+.notif-title{font-weight:600;color:var(--accent);margin-bottom:2px;}
+
+/* AI match explain */
+.match-bar{height:4px;border-radius:2px;background:var(--bg4);margin:8px 0;overflow:hidden;}
+.match-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--blue),var(--accent));}
+.match-pct{font-size:11px;color:var(--text3);}
+
+/* Responsive */
+@media(max-width:700px){
+.dash-grid{grid-template-columns:1fr;}
+.stats-row{flex-wrap:wrap;}
+.hero h1{font-size:36px;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Internia <span>smart internships</span></div>
+  <div class="nav-links">
+    <button class="nav-btn active" onclick="showPage('home',this)">Browse</button>
+    <button class="nav-btn" onclick="showPage('apply',this)">Apply</button>
+    <button class="nav-btn" onclick="showPage('dashboard',this)">My Dashboard</button>
+    <button class="nav-btn" onclick="showPage('recruiter',this)">Recruiter</button>
+    <button class="nav-btn" onclick="showPage('admin',this)">Admin</button>
+  </div>
+  <div class="nav-right">
+    <span class="role-badge" id="roleBadge">Student</span>
+    <button class="user-btn" id="userBtn">👤 Mia Chen</button>
+    <button class="switch-btn" onclick="cycleRole()">Switch role</button>
+  </div>
+</nav>
+
+<!-- HOME PAGE -->
+<main>
+<div id="page-home" class="page active">
+  <div class="hero">
+    <h1>Find your perfect <em>internship</em> with AI</h1>
+    <p>Search thousands of opportunities. Our AI matches you based on your skills, goals, and schedule — not just keywords.</p>
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="e.g. 'Python internship in Berlin' or 'remote UX design'..." />
+      <button class="ai-btn" onclick="doAISearch()"><span class="ai-spark">✦</span> AI Match</button>
+    </div>
+    <div class="filter-row">
+      <button class="filter-chip" onclick="toggleChip(this)">Remote</button>
+      <button class="filter-chip" onclick="toggleChip(this)">Paid</button>
+      <button class="filter-chip" onclick="toggleChip(this)">Engineering</button>
+      <button class="filter-chip" onclick="toggleChip(this)">Design</button>
+      <button class="filter-chip" onclick="toggleChip(this)">AI/ML</button>
+      <button class="filter-chip" onclick="toggleChip(this)">Summer 2025</button>
+    </div>
+  </div>
+
+  <div class="ai-result" id="aiResult">
+    <div class="ai-result-head">
+      <div class="ai-icon">✦</div>
+      <div class="ai-label">AI Analysis</div>
+      <div class="ai-loader" id="aiLoader">
+        <div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div>
+      </div>
+    </div>
+    <div class="ai-text" id="aiText"></div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat"><div class="stat-num">2,847</div><div class="stat-label">Active listings</div></div>
+    <div class="stat"><div class="stat-num">340</div><div class="stat-label">Companies hiring</div></div>
+    <div class="stat"><div class="stat-num">94%</div><div class="stat-label">Match accuracy</div></div>
+    <div class="stat"><div class="stat-num">12k+</div><div class="stat-label">Students placed</div></div>
+  </div>
+
+  <div style="max-width:1100px;margin:0 auto;">
+    <div class="section-header">
+      <div class="section-title">Top matches for you</div>
+      <button class="view-all">View all 2,847 →</button>
+    </div>
+  </div>
+
+  <div class="cards-grid" id="cardsGrid"></div>
+</div>
+
+<!-- APPLY PAGE -->
+<div id="page-apply" class="page">
+  <div class="app-form">
+    <h2>Apply for internship</h2>
+    <p class="sub">Machine Learning Engineer Intern · Google DeepMind · London</p>
+    <div class="steps">
+      <div class="step active" id="step1">
+        <div class="step-dot">1</div>
+        <div class="step-label">Profile</div>
+      </div>
+      <div class="step" id="step2">
+        <div class="step-dot">2</div>
+        <div class="step-label">Documents</div>
+      </div>
+      <div class="step" id="step3">
+        <div class="step-dot">3</div>
+        <div class="step-label">Questions</div>
+      </div>
+      <div class="step" id="step4">
+        <div class="step-dot">4</div>
+        <div class="step-label">Review</div>
+      </div>
+    </div>
+
+    <div id="applyStep1">
+      <div class="form-group">
+        <label>Full name</label>
+        <input type="text" value="Mia Chen" />
+      </div>
+      <div class="form-group">
+        <label>Email address</label>
+        <input type="email" value="mia.chen@uni.edu" />
+      </div>
+      <div class="form-group">
+        <label>University</label>
+        <input type="text" placeholder="e.g. University of Warsaw" />
+      </div>
+      <div class="form-group">
+        <label>Expected graduation</label>
+        <select><option>June 2026</option><option>June 2027</option><option>June 2025</option></select>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-primary" onclick="nextStep(1)">Continue →</button>
+      </div>
+    </div>
+
+    <div id="applyStep2" style="display:none">
+      <div class="form-group">
+        <label>Resume / CV</label>
+        <div style="background:var(--bg3);border:1px dashed var(--border2);border-radius:var(--radius);padding:1.5rem;text-align:center;color:var(--text3);font-size:14px;">
+          📎 Drag & drop your PDF here, or <span style="color:var(--accent);cursor:pointer;">browse files</span><br>
+          <span style="font-size:12px;margin-top:6px;display:block;">mia_chen_resume.pdf — ready to upload</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Cover letter (optional)</label>
+        <textarea placeholder="Tell us why you're excited about this role...">I'm passionate about applying deep learning to real-world problems. During my third year at university...</textarea>
+      </div>
+      <div class="form-group">
+        <label>Portfolio / GitHub URL</label>
+        <input type="text" value="github.com/miachen-ml" />
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-ghost" onclick="prevStep(2)">← Back</button>
+        <button class="btn btn-primary" onclick="nextStep(2)">Continue →</button>
+      </div>
+    </div>
+
+    <div id="applyStep3" style="display:none">
+      <div class="form-group">
+        <label>Why do you want to join DeepMind specifically?</label>
+        <textarea placeholder="Your answer...">DeepMind's work on protein folding and scientific AI fundamentally changed how I think about the field's potential...</textarea>
+      </div>
+      <div class="form-group">
+        <label>Describe a technical challenge you solved recently</label>
+        <textarea placeholder="Your answer..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Availability</label>
+        <select><option>June – September 2025</option><option>July – October 2025</option><option>Full year 2025</option></select>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-ghost" onclick="prevStep(3)">← Back</button>
+        <button class="btn btn-primary" onclick="nextStep(3)">Review application →</button>
+      </div>
+    </div>
+
+    <div id="applyStep4" style="display:none">
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;margin-bottom:1.5rem;font-size:13px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;"><span style="color:var(--text2)">Applicant</span><span>Mia Chen · mia.chen@uni.edu</span></div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;"><span style="color:var(--text2)">Role</span><span>ML Engineer Intern</span></div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;"><span style="color:var(--text2)">Company</span><span>Google DeepMind</span></div>
+        <div style="display:flex;justify-content:space-between;"><span style="color:var(--text2)">Resume</span><span style="color:var(--accent)">mia_chen_resume.pdf ✓</span></div>
+      </div>
+      <div style="background:rgba(200,240,106,.06);border:1px solid rgba(200,240,106,.2);border-radius:var(--radius);padding:.85rem;font-size:13px;color:var(--text2);margin-bottom:1.5rem;">
+        ✦ AI review: Your profile matches <strong style="color:var(--accent)">91%</strong> of requirements. Strong Python skills detected. Consider adding transformer experience to your cover letter.
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-ghost" onclick="prevStep(4)">← Back</button>
+        <button class="btn btn-primary" onclick="submitApp()">Submit application ✓</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD PAGE -->
+<div id="page-dashboard" class="page">
+  <div class="dash-grid">
+    <div class="dash-sidebar">
+      <h3>Navigation</h3>
+      <div class="dash-menu-item active"><span class="dash-menu-icon">📋</span>My Applications</div>
+      <div class="dash-menu-item"><span class="dash-menu-icon">⭐</span>Saved listings</div>
+      <div class="dash-menu-item"><span class="dash-menu-icon">🔔</span>Notifications</div>
+      <div class="dash-menu-item"><span class="dash-menu-icon">👤</span>My Profile</div>
+      <div class="dash-menu-item"><span class="dash-menu-icon">✦</span>AI Career Coach</div>
+      <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
+        <div style="font-size:12px;color:var(--text3);margin-bottom:8px;">AI Match Score</div>
+        <div style="font-size:22px;font-family:'DM Serif Display',serif;color:var(--accent);">91%</div>
+        <div class="match-bar"><div class="match-fill" style="width:91%"></div></div>
+        <div style="font-size:11px;color:var(--text3);">Profile 73% complete</div>
+        <button class="btn btn-ghost" style="width:100%;margin-top:10px;font-size:12px;" onclick="showNotif('AI Coach: Add 2 more skills to boost your score to 96%!')">Improve score ↗</button>
+      </div>
+    </div>
+    <div class="dash-main">
+      <div class="section-header">
+        <div class="section-title">My Applications</div>
+        <button class="view-all" onclick="showPage('home', document.querySelector('.nav-btn'))">Browse more →</button>
+      </div>
+      <div class="app-item">
+        <div class="app-logo-sm logo-g">G</div>
+        <div class="app-info">
+          <div class="app-role">ML Engineer Intern</div>
+          <div class="app-co">Google DeepMind · London</div>
+          <div class="app-date">Applied 3 days ago</div>
+        </div>
+        <span class="app-status status-review">Under review</span>
+      </div>
+      <div class="app-item">
+        <div class="app-logo-sm logo-m">M</div>
+        <div class="app-info">
+          <div class="app-role">Data Science Intern</div>
+          <div class="app-co">Meta · Warsaw (Remote)</div>
+          <div class="app-date">Applied 1 week ago</div>
+        </div>
+        <span class="app-status status-pending">Pending</span>
+      </div>
+      <div class="app-item">
+        <div class="app-logo-sm logo-a">A</div>
+        <div class="app-info">
+          <div class="app-role">Research Intern (AI Safety)</div>
+          <div class="app-co">Anthropic · Remote</div>
+          <div class="app-date">Applied 2 weeks ago</div>
+        </div>
+        <span class="app-status status-approved">Interview scheduled ✓</span>
+      </div>
+      <div class="app-item">
+        <div class="app-logo-sm logo-n">N</div>
+        <div class="app-info">
+          <div class="app-role">Frontend Engineer Intern</div>
+          <div class="app-co">Netflix · Amsterdam</div>
+          <div class="app-date">Applied 3 weeks ago</div>
+        </div>
+        <span class="app-status status-rejected">Not selected</span>
+      </div>
+      <div style="margin-top:2rem;">
+        <div class="section-header"><div class="section-title">AI Career Insights</div></div>
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius2);padding:1.25rem;">
+          <div style="font-size:14px;color:var(--text2);line-height:1.8;">
+            ✦ Based on your applications, you're strongest in <strong style="color:var(--text)">ML/AI roles</strong>. Your acceptance rate is <strong style="color:var(--accent)">33%</strong> — above average for this field.<br><br>
+            Recommended next step: Add your PyTorch project to your GitHub and update your profile for a <strong style="color:var(--accent)">+12% match boost</strong>.
+          </div>
+          <button class="btn btn-primary" style="margin-top:1rem;font-size:13px;" onclick="showNotif('Opening AI Career Coach...')">Chat with AI Coach ✦</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RECRUITER PAGE -->
+<div id="page-recruiter" class="page">
+  <div class="dash-grid">
+    <div class="dash-sidebar">
+      <h3>Recruiter tools</h3>
+      <div class="dash-menu-item active"><span class="dash-menu-icon">📥</span>Incoming Applications</div>
+      <div class="dash-menu-item"><span class="dash-menu-icon">📢</span>My Postings</div>
+      <div class="dash-menu-item"><span class="dash-menu-icon">✦</span>AI Screening</div>
+      <div class="dash-menu-item"><span class="dash-menu-icon">📊</span>Analytics</div>
+      <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);font-size:13px;color:var(--text2);">
+        <div style="margin-bottom:8px;">Company: <strong style="color:var(--text)">Google DeepMind</strong></div>
+        <div style="margin-bottom:8px;">Open roles: <strong style="color:var(--accent)">4</strong></div>
+        <div>Applications: <strong style="color:var(--text)">127</strong></div>
+      </div>
+    </div>
+    <div class="dash-main">
+      <div class="section-header">
+        <div class="section-title">Applications to review</div>
+        <div style="display:flex;gap:8px;">
+          <button class="ai-btn" style="font-size:13px;padding:7px 14px;" onclick="aiScreen()">✦ AI Screen all</button>
+        </div>
+      </div>
+
+      <div style="background:rgba(200,240,106,.05);border:1px solid rgba(200,240,106,.15);border-radius:var(--radius);padding:.85rem 1.25rem;margin-bottom:1rem;font-size:13px;color:var(--text2);" id="aiScreenResult" style="display:none">
+      </div>
+
+      <div class="candidate-item" id="cand1">
+        <div class="avatar av3">MC</div>
+        <div class="cand-info">
+          <div class="cand-name">Mia Chen <span style="font-size:11px;color:var(--accent);margin-left:6px;">91% match</span></div>
+          <div class="cand-skills">Python · PyTorch · NLP · University of Warsaw, 2026</div>
+        </div>
+        <div class="action-btns">
+          <button class="btn-view" onclick="openCandModal('Mia Chen','91%','Python, PyTorch, NLP, Transformers')">View</button>
+          <button class="btn-accept" onclick="acceptCand('cand1','Mia Chen')">Accept →</button>
+          <button class="btn-reject" onclick="rejectCand('cand1','Mia Chen')">Reject</button>
+        </div>
+      </div>
+      <div class="candidate-item" id="cand2">
+        <div class="avatar av1">AL</div>
+        <div class="cand-info">
+          <div class="cand-name">Alex Lukas <span style="font-size:11px;color:var(--accent);margin-left:6px;">87% match</span></div>
+          <div class="cand-skills">TensorFlow · Computer Vision · ETH Zürich, 2025</div>
+        </div>
+        <div class="action-btns">
+          <button class="btn-view" onclick="openCandModal('Alex Lukas','87%','TensorFlow, CV, CUDA')">View</button>
+          <button class="btn-accept" onclick="acceptCand('cand2','Alex Lukas')">Accept →</button>
+          <button class="btn-reject" onclick="rejectCand('cand2','Alex Lukas')">Reject</button>
+        </div>
+      </div>
+      <div class="candidate-item" id="cand3">
+        <div class="avatar av2">SK</div>
+        <div class="cand-info">
+          <div class="cand-name">Sara Kowalski <span style="font-size:11px;color:var(--blue);margin-left:6px;">74% match</span></div>
+          <div class="cand-skills">R · Statistics · Warsaw University of Tech, 2026</div>
+        </div>
+        <div class="action-btns">
+          <button class="btn-view" onclick="openCandModal('Sara Kowalski','74%','R, Statistics, SQL')">View</button>
+          <button class="btn-accept" onclick="acceptCand('cand3','Sara Kowalski')">Accept →</button>
+          <button class="btn-reject" onclick="rejectCand('cand3','Sara Kowalski')">Reject</button>
+        </div>
+      </div>
+      <div class="candidate-item" id="cand4">
+        <div class="avatar av4">DP</div>
+        <div class="cand-info">
+          <div class="cand-name">Dev Patel <span style="font-size:11px;color:var(--blue);margin-left:6px;">68% match</span></div>
+          <div class="cand-skills">Java · Android · IIT Delhi, 2026</div>
+        </div>
+        <div class="action-btns">
+          <button class="btn-view" onclick="openCandModal('Dev Patel','68%','Java, Android, Spring')">View</button>
+          <button class="btn-accept" onclick="acceptCand('cand4','Dev Patel')">Accept →</button>
+          <button class="btn-reject" onclick="rejectCand('cand4','Dev Patel')">Reject</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN PAGE -->
+<div id="page-admin" class="page">
+  <div class="dash-grid">
+    <div class="dash-sidebar">
+      <h3>Admin tools</h3>
+      <div class="dash-menu-item active"><span class="dash-menu-icon">🏛</span>Pending approvals</div>
+      <div class="dash-menu-item"><span class="dash-menu-icon">🏢</span>Companies</div>
+      <div class="dash-menu-item"><span class="dash-menu-icon">👥</span>Users</div>
+      <div class="dash-menu-item"><span class="dash-menu-icon">📊</span>Platform stats</div>
+      <div class="dash-menu-item"><span class="dash-menu-icon">🔒</span>Moderation</div>
+      <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);font-size:13px;">
+        <div style="font-size:12px;color:var(--text3);margin-bottom:6px;">Platform health</div>
+        <div style="color:var(--accent);font-size:13px;margin-bottom:4px;">● All systems operational</div>
+        <div style="color:var(--text2);font-size:12px;">3 listings pending review</div>
+      </div>
+    </div>
+    <div class="dash-main">
+      <div class="section-header">
+        <div class="section-title">Listings awaiting approval</div>
+      </div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:1rem;">Two-step approval required (Reviewer → Admin)</div>
+
+      <div class="candidate-item" id="listing1">
+        <div class="app-logo-sm logo-s" style="width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0;background:rgba(240,156,106,.12);color:var(--coral);">S</div>
+        <div class="cand-info">
+          <div class="cand-name">Backend Engineer Intern · Shopify</div>
+          <div class="cand-skills">Ruby on Rails · Kafka · Remote · €1,800/mo</div>
+          <div style="font-size:11px;margin-top:4px;"><span style="color:var(--accent)">✓ Reviewer approved</span> · Awaiting admin final sign-off</div>
+        </div>
+        <div class="action-btns">
+          <button class="btn-accept" onclick="adminApprove('listing1','Shopify Backend Intern')">Approve</button>
+          <button class="btn-reject" onclick="adminReject('listing1','Shopify Backend Intern')">Reject</button>
+        </div>
+      </div>
+      <div class="candidate-item" id="listing2">
+        <div class="app-logo-sm" style="width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0;background:rgba(106,180,240,.12);color:var(--blue);">T</div>
+        <div class="cand-info">
+          <div class="cand-name">AI Research Intern · Thoughtworks</div>
+          <div class="cand-skills">LLMs · Python · London · £1,500/mo</div>
+          <div style="font-size:11px;margin-top:4px;"><span style="color:var(--coral)">⏳ Awaiting reviewer</span> · Not yet reviewed</div>
+        </div>
+        <div class="action-btns">
+          <button class="btn-view" onclick="showNotif('This listing must be approved by a reviewer first.')">View</button>
+        </div>
+      </div>
+      <div class="candidate-item" id="listing3">
+        <div class="app-logo-sm" style="width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0;background:rgba(176,156,240,.12);color:var(--purple);">Z</div>
+        <div class="cand-info">
+          <div class="cand-name">Data Analyst Intern · Zalando</div>
+          <div class="cand-skills">SQL · Tableau · Berlin · €1,600/mo</div>
+          <div style="font-size:11px;margin-top:4px;"><span style="color:var(--accent)">✓ Reviewer approved</span> · Awaiting admin final sign-off</div>
+        </div>
+        <div class="action-btns">
+          <button class="btn-accept" onclick="adminApprove('listing3','Zalando Data Intern')">Approve</button>
+          <button class="btn-reject" onclick="adminReject('listing3','Zalando Data Intern')">Reject</button>
+        </div>
+      </div>
+
+      <div style="margin-top:2rem;"><div class="section-header"><div class="section-title">Platform overview</div></div></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;">
+        <div class="stat"><div class="stat-num">2,847</div><div class="stat-label">Live listings</div></div>
+        <div class="stat"><div class="stat-num">12,401</div><div class="stat-label">Students</div></div>
+        <div class="stat"><div class="stat-num">340</div><div class="stat-label">Companies</div></div>
+        <div class="stat"><div class="stat-num">3</div><div class="stat-label">Pending review</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</main>
+</div>
+
+<!-- CANDIDATE MODAL -->
+<div class="modal-overlay" id="candModal">
+  <div class="modal">
+    <button class="close-modal" onclick="closeModal('candModal')">×</button>
+    <h2 id="modalName">Candidate</h2>
+    <p class="sub" id="modalSub">ML Engineer Intern Application</p>
+    <div id="modalBody"></div>
+    <div class="form-actions" style="margin-top:1.5rem;">
+      <button class="btn btn-ghost" onclick="closeModal('candModal')">Close</button>
+      <button class="btn btn-primary" onclick="closeModal('candModal');showNotif('Interview invitation sent!')">Schedule interview ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- NOTIFICATION -->
+<div class="notif" id="notif">
+  <div class="notif-title" id="notifTitle">Done!</div>
+  <div id="notifBody"></div>
+</div>
+
+<script>
+const internships=[
+  {id:1,title:'ML Engineer Intern',company:'Google DeepMind',loc:'London',logo:'G',logoClass:'logo-g',tags:['Python','PyTorch','NLP'],remote:false,paid:true,salary:'€2,400/mo',deadline:'May 31',match:91,ribbon:'ribbon-green'},
+  {id:2,title:'UX Design Intern',company:'Spotify',loc:'Stockholm · Remote',logo:'S',logoClass:'logo-s',tags:['Figma','Research'],remote:true,paid:true,salary:'€1,800/mo',deadline:'Jun 15',match:84,ribbon:'ribbon-purple'},
+  {id:3,title:'Data Science Intern',company:'Meta',loc:'Warsaw (Remote)',logo:'M',logoClass:'logo-m',tags:['Python','SQL','Spark'],remote:true,paid:true,salary:'€2,100/mo',deadline:'Jun 1',match:88,ribbon:'ribbon-blue'},
+  {id:4,title:'AI Research Intern',company:'Anthropic',loc:'Remote',logo:'A',logoClass:'logo-a',tags:['LLMs','RLHF','Safety'],remote:true,paid:true,salary:'$2,800/mo',deadline:'Jun 20',match:79,ribbon:'ribbon-green'},
+  {id:5,title:'Backend Intern',company:'Shopify',loc:'Remote',logo:'S',logoClass:'logo-s',tags:['Ruby','Rails','Kafka'],remote:true,paid:true,salary:'€1,900/mo',deadline:'Jul 1',match:72,ribbon:''},
+  {id:6,title:'Computer Vision Intern',company:'Nvidia',loc:'Munich',logo:'N',logoClass:'logo-n',tags:['CUDA','OpenCV','C++'],remote:false,paid:true,salary:'€2,200/mo',deadline:'Jun 10',match:76,ribbon:'ribbon-blue'},
+];
+
+function renderCards(list){
+  const grid=document.getElementById('cardsGrid');
+  grid.innerHTML=list.map(i=>`
+    <div class="card">
+      ${i.ribbon?`<div class="card-ribbon ${i.ribbon}"></div>`:''}
+      <div class="card-top">
+        <div class="company-logo ${i.logoClass}">${i.logo}</div>
+        <span class="match-badge">✦ ${i.match}% match</span>
+      </div>
+      <h3>${i.title}</h3>
+      <div class="card-company">${i.company} · ${i.loc}</div>
+      <div class="tags">
+        ${i.tags.map(t=>`<span class="tag">${t}</span>`).join('')}
+        ${i.remote?'<span class="tag remote">Remote</span>':''}
+        ${i.paid?'<span class="tag paid">Paid</span>':''}
+      </div>
+      <div class="card-footer">
+        <div>
+          <div class="salary">${i.salary}</div>
+          <div class="deadline">Deadline: ${i.deadline}</div>
+        </div>
+        <button class="apply-btn" onclick="showPage('apply',null);showNotif('Viewing application for ${i.title}')">Apply →</button>
+      </div>
+    </div>
+  `).join('');
+}
+renderCards(internships);
+
+function toggleChip(el){el.classList.toggle('on');}
+
+const aiResponses={
+  default:"Based on your profile (Python, ML focus, 3rd year), I found 6 strong matches. Top pick: Google DeepMind ML Intern — 91% skill overlap. I also suggest adding 'Transformers' to your profile to unlock 4 more senior roles.",
+  python:"Great — Python is highly demanded. I found 8 roles using Python. Your strongest match is Google DeepMind (ML) at 91%. I recommend also looking at Meta's Data Science role which uses PySpark heavily.",
+  design:"Found 3 UX/product design internships. Spotify Stockholm is your best fit at 84% — they specifically want Figma + research skills, which aligns with your portfolio.",
+  remote:"12 remote internships match your profile. Anthropic AI Research (100% remote) scored 79%. Meta Warsaw is also fully remote with a strong Python fit at 88%.",
+  ai:"You have a strong AI/ML profile. Top matches: DeepMind (91%), Meta DS (88%), Anthropic (79%). I recommend highlighting any LLM or RLHF project work to push these scores higher.",
+};
+
+function doAISearch(){
+  const q=document.getElementById('searchInput').value.toLowerCase();
+  const res=document.getElementById('aiResult');
+  const txt=document.getElementById('aiText');
+  const loader=document.getElementById('aiLoader');
+  res.classList.add('show');
+  txt.textContent='';
+  loader.style.display='flex';
+  let reply=aiResponses.default;
+  if(q.includes('python'))reply=aiResponses.python;
+  else if(q.includes('design')||q.includes('ux'))reply=aiResponses.design;
+  else if(q.includes('remote'))reply=aiResponses.remote;
+  else if(q.includes('ai')||q.includes('ml')||q.includes('machine'))reply=aiResponses.ai;
+  setTimeout(()=>{
+    loader.style.display='none';
+    let i=0;
+    const iv=setInterval(()=>{
+      txt.textContent+=reply[i++];
+      if(i>=reply.length)clearInterval(iv);
+    },18);
+  },1100);
+}
+
+document.getElementById('searchInput').addEventListener('keydown',e=>{if(e.key==='Enter')doAISearch();});
+
+let currentStep=1;
+function nextStep(n){
+  document.getElementById('applyStep'+n).style.display='none';
+  document.getElementById('step'+n).classList.remove('active');
+  document.getElementById('step'+n).classList.add('done');
+  document.getElementById('step'+n).querySelector('.step-dot').textContent='✓';
+  currentStep=n+1;
+  if(currentStep<=4){
+    document.getElementById('applyStep'+currentStep).style.display='block';
+    document.getElementById('step'+currentStep).classList.add('active');
+  }
+}
+function prevStep(n){
+  document.getElementById('applyStep'+n).style.display='none';
+  document.getElementById('step'+(n-1)).classList.remove('done','active');
+  document.getElementById('step'+(n-1)).classList.add('active');
+  document.getElementById('step'+(n-1)).querySelector('.step-dot').textContent=n-1;
+  document.getElementById('applyStep'+(n-1)).style.display='block';
+  currentStep=n-1;
+}
+function submitApp(){
+  showNotif('Application submitted! You\'ll hear back within 5–7 business days. Good luck! 🎉');
+  showPage('dashboard',null);
+  currentStep=1;
+  [1,2,3,4].forEach(i=>{
+    const s=document.getElementById('step'+i);
+    s.classList.remove('done','active');
+    s.querySelector('.step-dot').textContent=i;
+    document.getElementById('applyStep'+i).style.display='none';
+  });
+  document.getElementById('step1').classList.add('active');
+  document.getElementById('applyStep1').style.display='block';
+}
+
+const roles=['Student','Recruiter','Admin'];
+const roleClasses=['role-student','role-recruiter','role-admin'];
+const users=['Mia Chen','James Taylor (Recruiter)','Admin'];
+let roleIdx=0;
+function cycleRole(){
+  roleIdx=(roleIdx+1)%3;
+  const badge=document.getElementById('roleBadge');
+  badge.textContent=roles[roleIdx];
+  badge.className='role-badge '+roleClasses[roleIdx];
+  document.getElementById('userBtn').textContent='👤 '+users[roleIdx];
+  showNotif('Switched to '+roles[roleIdx]+' view');
+}
+
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+}
+
+function showNotif(msg,title){
+  const n=document.getElementById('notif');
+  document.getElementById('notifTitle').textContent=title||'✓ Done';
+  document.getElementById('notifBody').textContent=msg;
+  n.classList.add('show');
+  setTimeout(()=>n.classList.remove('show'),3500);
+}
+
+function openCandModal(name,match,skills){
+  document.getElementById('modalName').textContent=name;
+  document.getElementById('modalSub').textContent='ML Engineer Intern · '+match+' AI match';
+  document.getElementById('modalBody').innerHTML=`
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;font-size:13px;margin-bottom:1rem;">
+      <div style="margin-bottom:6px;"><span style="color:var(--text2)">Skills:</span> ${skills}</div>
+      <div style="margin-bottom:6px;"><span style="color:var(--text2)">AI Match Score:</span> <strong style="color:var(--accent)">${match}</strong></div>
+      <div style="margin-bottom:6px;"><span style="color:var(--text2)">GitHub:</span> <span style="color:var(--blue)">github.com/profile</span></div>
+      <div><span style="color:var(--text2)">Availability:</span> June – September 2025</div>
+    </div>
+    <div style="background:rgba(200,240,106,.06);border:1px solid rgba(200,240,106,.15);border-radius:var(--radius);padding:.85rem;font-size:13px;color:var(--text2);">
+      ✦ AI Summary: Strong candidate with relevant technical background. Cover letter shows genuine interest. Recommend technical interview.
+    </div>
+  `;
+  document.getElementById('candModal').classList.add('open');
+}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+
+function acceptCand(id,name){
+  const el=document.getElementById(id);
+  el.style.opacity='.4';
+  el.querySelector('.action-btns').innerHTML=`<span style="color:var(--accent);font-size:13px;font-weight:600;">✓ Accepted</span>`;
+  showNotif('Interview invitation sent to '+name+'!','Accepted');
+}
+function rejectCand(id,name){
+  const el=document.getElementById(id);
+  el.style.opacity='.4';
+  el.querySelector('.action-btns').innerHTML=`<span style="color:var(--red);font-size:13px;">✗ Rejected</span>`;
+  showNotif(name+' has been notified. A rejection email was sent.','Application closed');
+}
+function aiScreen(){
+  const r=document.getElementById('aiScreenResult');
+  r.style.display='block';
+  r.innerHTML='<div style="display:flex;align-items:center;gap:8px;"><div class="ai-loader"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div></div><span>AI is screening all 127 applications...</span></div>';
+  setTimeout(()=>{
+    r.innerHTML='✦ AI Screening complete: <strong style="color:var(--text)">Mia Chen</strong> and <strong style="color:var(--text)">Alex Lukas</strong> are top candidates (91% and 87% match). 14 candidates have been auto-filtered as unqualified. <span style="color:var(--accent)">Recommended to interview: 8 candidates.</span>';
+  },2000);
+}
+function adminApprove(id,name){
+  const el=document.getElementById(id);
+  el.style.opacity='.5';
+  el.querySelector('.action-btns').innerHTML=`<span style="color:var(--accent);font-weight:600;font-size:13px;">✓ Published live</span>`;
+  showNotif(name+' is now live on the platform!','Listing approved');
+}
+function adminReject(id,name){
+  const el=document.getElementById(id);
+  el.style.opacity='.4';
+  el.querySelector('.action-btns').innerHTML=`<span style="color:var(--red);font-size:13px;">✗ Rejected</span>`;
+  showNotif(name+' was rejected. Company has been notified.','Listing rejected');
+}
+</script>
+</body>
+</html>
