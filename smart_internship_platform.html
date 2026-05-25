@@ -324,9 +324,10 @@ select option{background:var(--bg3);}
     <div id="applyStep2" style="display:none">
       <div class="form-group">
         <label>Resume / CV</label>
-        <div style="background:var(--bg3);border:1px dashed var(--border2);border-radius:var(--radius);padding:1.5rem;text-align:center;color:var(--text3);font-size:14px;">
-          📎 Drag & drop your PDF here, or <span style="color:var(--accent);cursor:pointer;">browse files</span><br>
-          <span style="font-size:12px;margin-top:6px;display:block;">mia_chen_resume.pdf — ready to upload</span>
+        <div id="dropZone" style="background:var(--bg3);border:1px dashed var(--border2);border-radius:var(--radius);padding:1.5rem;text-align:center;color:var(--text3);font-size:14px;cursor:pointer;transition:.2s;" onclick="document.getElementById('resumeInput').click()" ondragover="event.preventDefault();this.style.borderColor='var(--accent)'" ondragleave="this.style.borderColor='var(--border2)'" ondrop="handleDrop(event)">
+          📎 Drag & drop your PDF here, or <span style="color:var(--accent);">browse files</span>
+          <br><span id="fileLabel" style="font-size:12px;margin-top:6px;display:block;">No file chosen</span>
+          <input type="file" id="resumeInput" accept=".pdf,.doc,.docx" style="display:none" onchange="handleFile(this.files[0])">
         </div>
       </div>
       <div class="form-group">
@@ -806,6 +807,23 @@ function adminReject(id,name){
   el.style.opacity='.4';
   el.querySelector('.action-btns').innerHTML=`<span style="color:var(--red);font-size:13px;">✗ Rejected</span>`;
   showNotif(name+' was rejected. Company has been notified.','Listing rejected');
+}
+function handleFile(file) {
+  if (!file) return;
+  const label = document.getElementById('fileLabel');
+  const zone = document.getElementById('dropZone');
+  label.textContent = '✓ ' + file.name + ' (' + (file.size / 1024).toFixed(0) + ' KB)';
+  label.style.color = 'var(--accent)';
+  zone.style.borderColor = 'var(--accent)';
+  zone.style.background = 'rgba(200,240,106,0.05)';
+}
+
+function handleDrop(event) {
+  event.preventDefault();
+  const zone = document.getElementById('dropZone');
+  zone.style.borderColor = 'var(--border2)';
+  const file = event.dataTransfer.files[0];
+  if (file) handleFile(file);
 }
 </script>
 </body>
